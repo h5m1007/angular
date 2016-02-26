@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>angular</title>
+    <link rel="stylesheet/less" href="style.less">
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular-resource.min.js"></script>
+    <script src="less.min.js"></script>
+    <script src="script.js"></script>
+</head>
+
+<body ng-app="instantSearch" ng-controller="InstantSearchController">
+    <header>
+        <p ng-hide="active">Please click a menu item</p>
+        <p ng-show="active">You chose <b>{{active}}</b></p>
+        <nav class="{{active}}" ng-click="$event.preventDefault()">
+            <a href="###" class="home" ng-click="active='home'">BOOK</a>
+            <a href="###" class="projects" ng-click="active='projects'">POPULAR</a>
+            <a href="###" class="services" ng-click="active='services'">Services</a>
+            <a href="###" class="contact" ng-click="active='contact'">Contact</a>
+        </nav>
+    </header>
+    <div class="content">
+        <div id="main" ng-click="hideTooltip()">
+            <div class="bar" ng-show="showtooltip">
+                <div class="tooltip" ng-click="$event.stopPropagation()">
+                    <input type="text" ng-model="searchString" placeholder="Enter your search terms">
+                </div>
+            </div>
+        </div>
+        <p ng-click="toggleTooltip($event)">{{searchString}}</p>
+        <ul ng-show="book_list">
+            <li ng-repeat="i in items | searchFor:searchString">
+                <a href="{{i.url}}">
+                    <img alt="" ng-src="{{i.image}}">
+                    <p>{{i.title}}</p>
+                </a>
+            </li>
+        </ul>
+        <ul ng-show="popular_list">
+            <div class="layout_shift">
+                <a href="###" class="list-icon" ng-class="{active: layout == 'list'}" ng-click="layout = 'list'"></a>
+                <a href="###" class="grid-icon" ng-class="{active: layout == 'grid'}" ng-click="layout = 'grid'"></a>
+            </div>
+            <ul ng-show="layout == 'grid'" class="grid">
+                <li ng-repeat="p in pics">
+                    <a href="{{p.link}}" target="_blank"><img alt="" ng-src="{{p.images.low_resolution.url}}"></a>
+                </li>
+            </ul>
+            <ul ng-show="layout == 'list'" class="list">
+                <li ng-repeat="p in pics">
+                    <a href="{{p.link}}" target="_blank"><img alt="" ng-src="{{p.images.thumbnail.url}}"></a>
+                    <p>{{p.caption.text}}</p>
+                </li>
+            </ul>
+        </ul>
+    </div>
+</body>
+
+</html>
