@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>index06</title>
+    <script src="angular.min.js"></script>
+</head>
+
+<body ng-app="app">
+    <div class="" ng-controller="CommonController">
+        <div ng-controller="Controller1">
+            <p>{{greeting.text}}, Angular</p>
+            <button ng-click="test1()">test1</button>
+            <button ng-click="commonFn()">通用</button>
+        </div>
+        <div ng-controller="Controller2">
+            <p>{{greeting.text}}, Angular</p>
+            <p>{{greetForRoot.text}}, Angular</p>
+            <button ng-click="test2()">test2</button>
+        </div>
+    </div>
+    <script>
+    angular.module('app', [])
+        .controller('CommonController', function($scope) {
+            $scope.commonFn = function() {
+                alert("通用功能！");
+            };
+        })
+        .controller('Controller1', function($scope, $rootScope) {
+        	// rootScope 根作用域 一般位于ng-app位置
+            $scope.greeting = {
+                text: 'Hello1'
+            };
+            $rootScope.greetForRoot = {
+            	text: 'HelloRoot'
+            };
+            $scope.test1 = function() {
+                alert("test1");
+            };
+        })
+        .controller('Controller2', function($scope) {
+            $scope.greeting = {
+                text: 'Hello2'
+            };
+            $scope.test2 = function() {
+                alert("test2");
+            }
+        })
+    </script>
+</body>
+
+</html>

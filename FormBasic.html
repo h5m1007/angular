@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>FormBasci</title>
+	<script src="angular.min.js"></script>
+</head>
+<body ng-app="FormModule">
+	<form name="myForm" ng-submit="save()" ng-controller="FormCtrl">
+		<input type="text" name="userName" ng-model="user.userName" required>
+		<input type="password" name="password" ng-model="user.password" required>
+		<input type="submit" ng-disabled="myForm.$invalid">
+	</form>
+
+	<script>
+		angular.module('FormModule', [])
+			.controller('FormCtrl', function($scope){
+				$scope.user = {
+					userName: 'Leo',
+					password: ''
+				};
+				$scope.save = function(){
+					alert("保存数据！");
+				}
+			})
+	</script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>ExpanderSimple</title>
+	<script src="angular.min.js"></script>
+	<style>
+		.title{
+			width: 300px;
+			height: 30px;
+			line-height: 30px;
+			background-color: #000;
+			color: #fff;
+		}
+		.body{
+			width: 300px;
+			height: 50px;
+			line-height: 30px;
+			border: 1px solid #000;
+		}
+	</style>
+</head>
+<body ng-app="expanderModule">
+	<div ng-controller="SomeController">
+		<accordion>
+			<expander class="expander" ng-repeat="expander in expanders" expander-title="expander.title">
+				{{expander.text}}
+			</expander>
+		</accordion>
+	</div>
+
+	<script>
+		angular.module('expanderModule', [])
+			.controller('SomeController', function($scope){
+				$scope.expanders = [{
+					title: '点击展开',
+					text: '这里是内部的内容'
+				},{
+					title: '点击展开',
+					text: '这里是内部的内容'
+				},{
+					title: '点击展开',
+					text: '这里是内部的内容'
+				},]
+			})
+			.directive('accordion', function(){
+				return{
+					restrict: 'EA',
+					replace: true,
+					transclude: true,
+					template: '<div ng-transclude></div>',
+					controller: function(){
+						var expanders = [];
+						this.gotOpened = function(selectedExpander){
+							angular.forEach(expanders, function(expander){
+								if(selectedExpander != expander){
+									expander.showMe = false;
+								}
+							});
+						}
+						this.addExpander = function(expander){
+							expanders.push(expander);
+						}
+					}
+				}
+			})
+			.directive('expander', function(){
+				return {
+					restrict: 'EA',
+					replace: true,
+					transclude: true,
+					require: '^?accordion',
+					scope: {
+						title: '=expanderTitle'
+					},
+					template: '<div>'
+							+ '<div class="title" ng-click="toggle()">{{title}}</div>'
+							+ '<div class="body" ng-show="showMe" ng-transclude></div>'
+							+ '</div>',
+					link: function(scope, element, attrs, accordionController){
+						scope.showMe = false;
+						accordionController.addExpander(scope);
+						scope.toggle = function(){
+							scope.showMe = !scope.showMe;
+							accordionController.gotOpened(scope);
+						}
+					}
+				}
+			})
+	</script>
+</body>
+</html>

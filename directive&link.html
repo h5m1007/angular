@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>directiveLink</title>
+    <script src="angular.min.js"></script>
+</head>
+
+<body ng-app="MyModule">
+    <div ng-controller="MyCtrl">
+        <loader howToLoad="loadData()">
+            <h1>滑动加载</h1>
+        </loader>
+    </div>
+	<hr>
+    <div ng-controller="MyCtrl2">
+        <loader howToLoad="loadData2()">
+            <h1>滑动加载</h1>
+        </loader>
+    </div>
+
+    <script>
+    angular.module("MyModule", [])
+        .controller('MyCtrl', ['$scope', function($scope) {
+            $scope.loadData = function() {
+                console.log("加载数据中...");
+            }
+        }])
+        .controller('MyCtrl2', ['$scope', function($scope) {
+            $scope.loadData2 = function() {
+                console.log("加载数据中...222");
+            }
+        }])
+        .directive('loader', function() {
+            return {
+                restrict: "AE",
+                link: function(scope, element, attrs) {
+                    element.bind("mouseenter", function() {
+                        // scope.loadData();
+                        // scope.$apply("loadData()");
+                        // 一样的自定义标签执行不同的函数(指令复用)
+                        scope.$apply(attrs.howtoload);
+                    })
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

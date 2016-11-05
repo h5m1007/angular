@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>table</title>
+	<script src="angular.min.js"></script>
+	<script src="angular-mocks.js"></script>
+	<script src="index01.js"></script>
+	<script src="index01testing.js"></script>
+</head>
+<body ng-app="app">
+	<div ng-controller="InvoiceCntl">
+		<b>Invoice: </b>
+		<br>
+		<br>
+		<table>
+			<tr>
+				<td>Quantity</td>
+				<td>Cost</td>
+			</tr>
+			<tr>
+				<td><input type="integer" min="0" ng-model="qty" required></td>
+				<td><input type="number" ng-model="cost" required></td>
+			</tr>
+		</table>
+		<hr>
+		<b>Total: </b>{{qty * cost | currency}}
+	</div>
+</body>
+</html>

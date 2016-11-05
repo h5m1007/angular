@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>index05</title>
+	<script src="angular.min.js"></script>
+	<style>
+		ul.nceditor{
+			list-style: none;
+			padding: 10px;
+			margin: 0;
+			width: 300px;
+			border: 1px solid  #787878;
+			line-height: 30px;
+		}
+	</style>
+</head>
+<body ng-app="ezstuff" ng-init="sb = {name: 'somebody', gender: 'male', age: 28}">
+	<ez-namecard-editor data="sb"></ez-namecard-editor>
+	<div class="" ez-logger data="sb"></div>
+
+	<script>
+		angular.module("ezstuff", [])
+			.directive("ezNamecardEditor", function(){
+				return {
+					restrict: "E",
+					template: "<ul class='nceditor'></ul>",
+					replace: true,
+					link: function(scope, element, attrs){
+						var model = attrs.data;
+
+						element.append("<li>name: <input type='text' field='name'></li>")
+							.append("<li>gender: <input type='text' field='gender'></li>")
+							.append("<li>age: <input type='text' field='age'></li>");
+
+						element.find("input").on("keyup", function(ev){
+							var field = ev.target.getAttribute("field");
+							scope[model][field] = ev.target.value;
+							scope.$apply("");	// 捕捉对数据的修改
+						});
+					}
+				};
+			})
+
+			.directive("ezLogger", function(){
+				return {
+					restrict: "A",
+					link: function(scope, element, attrs){
+						var model = attrs.data;
+
+						scope.$watch(model, function(nv){
+							var cnt = JSON.stringify(nv,null," ");
+							element.html("<pre>" + cnt + "</pre>");
+						}, true);
+					}
+				};
+			});
+	</script>
+</body>
+</html>

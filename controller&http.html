@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>$http</title>
+	<script src="angular.min.js"></script>
+</head>
+<body ng-app="MyModule">
+	<div ng-controller="LoadDataCtrl">
+		<ul>
+			<li ng-repeat="user in users">
+				{{user.name}}
+			</li>
+		</ul>
+	</div>
+
+	<script>
+		angular.module('MyModule', [])
+			.controller('LoadDataCtrl', ['$scope', '$http', function($scope, $http){
+					$http({
+						method: 'GET',
+						url: 'data.json'
+					}).success(function(data, status, headers, config){
+						console.log("success...");
+						console.log(data);
+						$scope.users = data;
+					}).error(function(data, status, headers, config){
+						console.log("error...");
+					})
+			}])
+	</script>
+</body>
+</html>

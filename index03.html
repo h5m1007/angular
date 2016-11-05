@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>index03</title>
+	<script src="angular.min.js"></script>
+	<style>
+		div.clock{
+			padding: 10px;
+			margin: 0 auto;
+			width: 400px;
+			background: #000;
+			color: #0f0;
+		}
+	</style>
+</head>
+<body ng-app="ezstuff">
+	<ez-clock></ez-clock>
+
+	<script>
+		angular.module('ezstuff', [])
+			.directive('ezClock', function(){
+				return {
+					restrict: 'E',
+					replace: true,
+					template: "<div class='clock'></div>",
+					link: function(scope, element, attrs){
+						setInterval(function(){
+							var d = new Date();
+							// element指向template声明的DOM对象
+							element.text(d.toString());
+						},1000);
+					}
+				}
+			})
+	</script>
+</body>
+</html>

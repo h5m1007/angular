@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>index07</title>
+	<script src="angular.min.js"></script>
+</head>
+<body ng-app="app">
+	<div class="" ng-controller="EventController">
+		Root scope
+		<tt>MyEvent</tt> count: {{count}}
+		<ul>
+			<!-- 事件传播方式 -->
+			<li ng-repeat="i in [1]" ng-controller="EventController">
+				<button ng-click="$emit('MyEvent')">
+					<!-- $emit 向上传播 包括上级根与同级 -->
+					$emit('MyEvent')
+				</button>
+				<button ng-click="$broadcast('MyEvent')">
+					<!-- $broadcast 向下传播 包括下级与同级 -->
+					$broadcast('MyEvent')
+				</button>
+				<br>
+				<tt>MyEvent</tt> count: {{count}}
+				<ul>
+					<li ng-repeat="item in [1,2]" ng-controller="EventController">
+						Leaf scope
+						<tt>MyEvent</tt> count: {{count}}
+					</li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+
+	<script>
+		angular.module('app', [])
+		 .controller('EventController', function($scope){
+		 	$scope.count = 0;
+		 	$scope.$on('MyEvent', function(){
+		 		$scope.count++;
+		 	});
+		 })
+	</script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>templateCache</title>
+	<script src="angular.min.js"></script>
+</head>
+<body ng-app="MyModule">
+	<hello>
+		<div class="">原始内容</div>
+	</hello>
+
+	<script>
+		var myModule = angular.module("MyModule", []);
+		myModule.run(function($templateCache){
+			$templateCache.put("hello.html", "<div>Hello everyone!<div ng-transclude></div></div>");
+		});
+		myModule.directive("hello", function($templateCache){
+			return{
+				restrict: 'AECM',
+				template: $templateCache.get("hello.html"),
+				// replace: true
+				transclude: true // 保留原始内容到ng-transclude指定位置
+
+				compile: function(){
+					// 对模板自身进行转换
+					// 一般不需自己再定义
+				},
+				link: function(){
+					// link负责模型与视图间的动态关联
+					// angular强调的模块化 不推荐直接操作DOM
+					// DOM操作推荐在link函数里执行
+				}
+			}
+		});
+	</script>
+</body>
+</html>

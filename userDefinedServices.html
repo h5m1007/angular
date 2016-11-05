@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>$services</title>
+	<script src="angular.min.js"></script>
+</head>
+<body ng-app="MyServiceApp">
+	<div ng-controller="ServiceController">
+		<label>用户名</label>
+		<input type="text" ng-model="username" placeholder="请输入用户名">
+		<pre ng-show="username">{{users}}</pre>
+	</div>
+
+	<script>
+		angular.module('MyServiceApp', [])
+			.controller('ServiceController', ['$scope', '$timeout', 'userListService', function($scope, $timeout, userListService){
+				// 封装的services userListService
+				// 可以做为注入的服务 但不需$
+					var timeout;
+					$scope.$watch('username', function(newUserName){
+						if(newUserName){
+							if(timeout){
+								$timeout.cancel(timeout);
+							}
+							timeout = $timeout(function(){
+								userListService.userList(newUserName)
+									.success(function(data, status){
+										$scope.users = data;
+									});
+							}, 350);
+						}
+					})
+			}])
+			// 封装自己的服务services
+			.factory('userListService', ['$http',
+				function($http){
+					var doRequest = function(username, path){
+						return $http({
+							method: 'GET',
+							url: 'data.json'
+						});
+					}
+					return{
+						userList: function(username){
+							return doRequest(username, 'userList');
+						}
+					};
+				}])
+	</script>
+</body>
+</html>

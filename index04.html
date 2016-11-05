@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>index04</title>
+	<script src="angular.min.js"></script>
+	<style>
+		.namecard{
+			border: 1px solid  #000;
+			border-radius: 10px;
+			padding: 10px;
+			width: 300px;
+			background: #f0f0f0;
+		}
+	</style>
+</head>
+<body ng-app="ezstuff" ng-init="sb = {name: 'somebody', gender: 'male', age: 28}">
+	<ez-namecard data="sb"></ez-namecard>
+
+	<script>
+		angular.module("ezstuff", [])
+			.directive("ezNamecard", function($rootScope){
+				return{
+					restrict: "E",
+					template: "<div class='namecard'>",
+					replace: true,
+					link: function(scope, element, attrs){
+						element.append("<div>name: <span class='name'></span></div>")
+							.append("<div>gender: <span field='gender'></span></div>")
+							.append("<div>age: <span field='age'></span></div>")
+						scope.$watch(attrs.data, function(nv, ov){
+							// 监听数据变化 使得界面与数据同步
+							// $watch(监听的表达式, function(新值,旧值){})
+							var fields = element.find("span");
+							fields[0].textContent = nv.name;
+							fields[1].textContent = nv.gender;
+							fields[2].textContent = nv.age;
+						}, true);	// 当监听表达式为对象时设为true
+
+						setInterval(function(){
+							scope.$apply("sb.age = sb.age + 1;")
+						}, 1000);
+					}
+				};
+			});
+	</script>
+</body>
+</html>

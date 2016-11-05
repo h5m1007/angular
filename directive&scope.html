@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>directive&scope</title>
+	<link rel="stylesheet" href="bootstrap.min.css">
+	<script src="angular.min.js"></script>
+</head>
+<body ng-app="MyModule">
+	<div ng-controller="MyCtrl">
+		<drink flavor="{{ctrlFlavor}}"></drink>
+	</div>
+	<hr>
+	<div ng-controller="MyCtrl2">
+		Ctrl:
+		<br>
+		<input type="text" ng-model="ctrlFlavor2">
+		<br>
+		Directive:
+		<br>
+		<eat flavor="ctrlFlavor2"></eat>
+	</div>
+	<hr>
+	<div ng-controller="MyCtrl3">
+		<greeting greet="sayHello(name)"></greeting>
+		<greeting greet="sayHello(name)"></greeting>
+		<greeting greet="sayHello(name)"></greeting>
+	</div>
+
+	<script>
+		angular.module('MyModule', [])
+			.controller('MyCtrl', ['$scope', function($scope){
+				$scope.ctrlFlavor = '百威';
+			}])
+			.directive('drink', function(){
+				return {
+					restrict: 'AE',
+					scope: {
+						flavor: '@'
+						// @ 在父scope与隔离scope建立单向绑定
+						// 把当前属性作为字符串传递
+						// @ 把flavor绑定到了MyCtrl下的ctrlFlavor
+					},
+					template: "<div>{{flavor}}</div>"/*,
+					link: function(scope, element, attrs){
+						scope.flavor = attrs.flavor;
+						// scope.flavor指向template的flavor
+						// attrs.flavor指向MyCtrl下的ctrlFlavor
+					}*/
+				}
+			})
+			.controller('MyCtrl2', ['$scope', function($scope){
+				$scope.ctrlFlavor2 = '薯片';
+			}])
+			.directive('eat',function(){
+				return{
+					restrict: 'AE',
+					scope: {
+						flavor: '='
+						// = 在父scope与隔离scope建立双向绑定
+					},
+					template: '<input type="text" ng-model="flavor">'
+				}
+			})
+			.controller('MyCtrl3', function($scope){
+				$scope.sayHello = function(name){
+					alert("Hello " + name);
+				}
+			})
+			.directive('greeting', function(){
+				return{
+					restrict: 'AE',
+					scope: {
+						greet: '&'
+						// & 绑定父scope定义的函数
+					},
+					template: '<input type="text" ng-model="userName"><br>' + 
+								'<button class="btn btn-default" ng-click="greet({name: userName})">Greeting</button><br>'
+				}
+			})
+	</script>
+</body>
+</html>
